@@ -11,8 +11,14 @@
 
         <!-- Blog Entries Column -->
         <div class="col-md-8">
+
             <?php
-            $query = "SELECT * FROM posts";
+            if(isset($_GET['category'])){
+                $post_category = $_GET['category'];
+            }
+
+
+            $query = "SELECT * FROM posts WHERE post_category_id = $post_category";
             $select_all_posts_query = mysqli_query($connection, $query);
 
             while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
@@ -22,13 +28,6 @@
                 $post_date = $row['post_date'];
                 $post_image = $row['post_image'];
                 $post_content = substr($row['post_content'], 0 , 100);
-                $post_status = $row['post_status'];
-
-                if($post_status !== "published"){
-                    echo "<h1 class='text-center'>NO POST SO FAR</h1>";
-                }else{
-
-                
 
             ?>
                 <h1 class="page-header">
@@ -54,8 +53,7 @@
 
 
             <?php
-            } 
-        }
+            }
             ?>
 
 
