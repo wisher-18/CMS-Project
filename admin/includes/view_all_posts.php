@@ -26,9 +26,7 @@
                 
                 default:
             }
-
         }
-
     }
 ?>
 
@@ -100,8 +98,6 @@
             }
             
             
-            
-            
             echo "<td>{$post_status}</td>";
             echo "<td><img width=100 src='../images/{$post_image}'></td>";
             echo "<td>{$post_tags}</td>";
@@ -111,7 +107,6 @@
             echo "<td><a href='posts.php?delete={$post_id}'>Delete</a></td>";
             echo "</tr>";
         }
-        
         
         ?>
 
