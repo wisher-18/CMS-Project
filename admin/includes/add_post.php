@@ -24,6 +24,12 @@ if(isset($_POST['create_post'])){
     $create_post_query = mysqli_query($connection, $query);
     
     confirmQuery($create_post_query);
+    //Last Created ID
+    $the_post_id = mysqli_insert_id($connection);
+
+    //Notification After Creating
+    echo "<p class= 'bg-success'>Post Created. <a href='../post.php?p_id={$the_post_id}'>View Post</a> or
+    <a href='posts.php'>Edit More Posts</a></p>";
 }
 ?>
 <form action="" method="post" enctype="multipart/form-data">
@@ -56,8 +62,13 @@ if(isset($_POST['create_post'])){
     </div>
 
     <div class="form-group">
-        <label for="post_status">Post Status</label>
-        <input type="text" class="form-control" name="post_status">
+        
+        <select name="post_status">
+            <option value="draft">Select Status</option>
+            <option value="published">Publish</option>
+            <option value="draft">Draft</option>
+        </select>
+        <!-- <input type="text" class="form-control" name="post_status"> -->
     </div>
 
     <div class="form-group">
@@ -71,9 +82,8 @@ if(isset($_POST['create_post'])){
     </div>
 
     <div class="form-group">
-        <label for="post_tags">Post Content</label>
-        <textarea type="text" id=" " cols="30" rows="10" class="form-control" name="post_content">
-        </textarea>
+        <label for="summernote">Post Content</label>
+        <textarea id="summernote" cols="30" rows="10" class="form-control" name="post_content"></textarea>
     </div>
 
     <div class="form-group">

@@ -2,6 +2,12 @@
 <?php include "../includes/db.php" ?>
 <?php include "functions.php";?>
 <?php ob_start()?>
+<?php session_start();?>
+<?php 
+    if(!isset($_SESSION['user_role'])){
+            header("Location: ../index.php");
+    }
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,7 +23,10 @@
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 
+    <!-- <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="css/summernote.min.css">
     <!-- Custom CSS -->
     <link href="css/sb-admin.css" rel="stylesheet">
 
@@ -30,6 +39,8 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
 </head>
 

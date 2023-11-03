@@ -54,6 +54,9 @@ if (isset($_POST['update_post'])) {
     $update_query = mysqli_query($connection, $query);
     confirmQuery($update_query);
 
+    echo "<p class= 'bg-success'>Post Updated. <a href='../post.php?p_id={$get_post_id}'>View Post</a> or
+    <a href='posts.php'>Edit More Posts</a></p>";
+
 }
 ?>
 
@@ -85,10 +88,18 @@ if (isset($_POST['update_post'])) {
         <label for="post_author">Post Author</label>
         <input value="<?php echo $post_author;?>" type="text" class="form-control" name="post_author">
     </div>
-
+        
     <div class="form-group">
-        <label for="post_status">Post Status</label>
-        <input value="<?php echo $post_status;?>" type="text" class="form-control" name="post_status">
+    <select name="post_status" id="">
+        <option value='<?php $post_status; ?>'><?php echo $post_status; ?></option>
+        <?php
+            if($post_status == 'published'){
+                echo "<option value='draft'>draft</option>";
+            }else{
+                echo "<option value='published'>publish</option>";
+            }
+        ?>
+    </select>
     </div>
 
     <div class="form-group">
@@ -102,11 +113,9 @@ if (isset($_POST['update_post'])) {
     </div>
 
     <div class="form-group">
-        <label for="post_tags">
+        <label for="post_content">
             
-        <textarea type="text" id="" cols="30" rows="10" class="form-control" name="post_content">
-        <?php echo $post_content;?>
-        </textarea>
+        <textarea type="text" id="summernote" cols="30" rows="10" class="form-control" name="post_content"><?php echo $post_content;?></textarea>
     </div>
 
     <div class="form-group">
