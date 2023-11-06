@@ -14,15 +14,9 @@
             <?php
             if(isset($_GET['p_id'])){
                 $get_post_id = $_GET['p_id'];
-
-                //Incrementing Views Count when Visited a post
-                $views_query = "UPDATE posts SET post_views_count = post_views_count + 1 ";
-                $views_query .= "WHERE post_id = $get_post_id";
-                $update_view_count = mysqli_query($connection, $views_query);
-        
-
-            //Selecting post to show
-            $query = "SELECT * FROM posts WHERE post_id = '$get_post_id'";
+                $get_post_author = $_GET['author'];
+            }
+            $query = "SELECT * FROM posts WHERE post_author = '{$get_post_author}'";
             $select_all_posts_query = mysqli_query($connection, $query);
 
             while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
@@ -44,7 +38,8 @@
                     <a href="post.php?p_id=<?php echo $post_id;?>"><?php echo $post_title ?></a>
                 </h2>
                 <p class="lead">
-                    by <a href="author_posts.php?author=<?php echo $post_author ?>&p_id=<?php echo $post_id ?>"><?php echo $post_author ?></a>
+                    All post by <?php echo $post_author ?>
+                    
                 </p>
                 <p><span class="glyphicon glyphicon-time"></span><?php echo $post_date ?></p>
                 <hr>
@@ -58,9 +53,6 @@
 
             <?php
             }
-        }else{
-
-        }
             ?>
         <?php
             //CREATING COMMENT QUERY
@@ -80,17 +72,11 @@
                     if(!$create_comment_query){
                         die('QUERY FAILED'.mysqli_error($connection ));
                     }
-
-                    
                     
                     //UPDATING COMMENT COUNT IN POSTS
                     $query = "UPDATE posts SET post_comment_count = post_comment_count + 1 ";
                     $query .= "WHERE post_id = $comment_post_id";
                     $update_comment_count = mysqli_query($connection, $query);
-
-                    
-                    header("Location: /cms/post.php?p_id={$get_post_id}");
-                    exit;
 
                 }else{
                     echo "<script>alert('Fields cannot be empty!')</script>";

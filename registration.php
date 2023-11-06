@@ -13,10 +13,17 @@
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        if(!empty($username) && !empty($email) && !empty($password)){
-            $username = mysqli_real_escape_string($connection, $username);
-            $email    = mysqli_real_escape_string($connection, $email);
-            $password = mysqli_real_escape_string($connection, $password);
+    if (!empty($username) && !empty($email) && !empty($password)) {
+        $username = mysqli_real_escape_string($connection, $username);
+        $email    = mysqli_real_escape_string($connection, $email);
+        $password = mysqli_real_escape_string($connection, $password);
+
+
+        // // Generate a unique salt and hash the password
+        // $options = [
+        //     'cost' => 12, // You can adjust the cost factor as needed
+        // ];
+        // $password = password_hash($password, PASSWORD_BCRYPT, $options);
 
             //Selecting randSalt for encrypting 
             $query = "SELECT randSalt FROM users";
@@ -26,12 +33,15 @@
             }
 
             //Fetching result from randSalt query
-            $row = mysqli_fetch_array($select_randsalt_query);
+            $row = mysqli_fetch_assoc($select_randsalt_query);
             $salt = $row['randSalt'];
 
-            //Inserting user into the database query
+            //Crypt Function
+            $hashed = crypt($password, '$2y$10$iusesomecrazystrings22');
+
+            // //Inserting user into the database query
             $query = "INSERT INTO users (username, user_email, user_password, user_role) ";
-            $query .= "VALUES ('{$username}','{$email}', '{$password}','subscriber')";
+            $query .= "VALUES ('{$username}','{$email}', '{$hashed}','subscriber')";
             $insert_user_query = mysqli_query($connection, $query);
             if(!$insert_user_query){
                 die("QUERY FAILED".mysqli_errno($connection));

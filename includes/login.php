@@ -23,6 +23,10 @@
                 $db_user_role = $row['user_role'];
                 
         }
+
+        // Encrypting Password
+        $password = crypt($password, $db_password);
+
         if($username === $db_username && $password === $db_password){
             $_SESSION['username'] = $db_username;
             $_SESSION['firstname'] = $db_user_firstname;
@@ -32,6 +36,7 @@
             header("Location: ../admin");
 
         }else{
+            echo "Invalid Credentials!";
             header("Location: ../index.php");
         }
 
