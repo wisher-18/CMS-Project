@@ -12,7 +12,6 @@ if (isset($_SESSION['username'])) {
         $user_firstname = $row['user_firstname'];
         $user_lastname = $row['user_lastname'];
         $user_email = $row['user_email'];
-        $user_role = $row['user_role'];
         $user_image = $row['user_image'];
         $user_password = $row['user_password'];
     }
@@ -23,7 +22,6 @@ if (isset($_SESSION['username'])) {
     if (isset($_POST['update_profile'])) {
         $user_firstname = $_POST['user_firstname'];
         $user_lastname = $_POST['user_lastname'];
-        $user_role = $_POST['user_role'];
         $username = $_POST['username'];
     
         // $post_image = $_FILES['post_image']['name'];
@@ -40,7 +38,6 @@ if (isset($_SESSION['username'])) {
         // $query .= "post_date = now(), ";
         $query .= "user_email = '{$user_email}', ";
         $query .= "user_password = '{$user_password}', ";
-        $query .= "user_role = '{$user_role}', ";
         $query .= "username = '{$username}' ";
         
         $query .= "WHERE username = '{$username}'";
@@ -80,18 +77,6 @@ if (isset($_SESSION['username'])) {
                             <input type="text" value="<?php echo $user_lastname; ?>" class="form-control" name="user_lastname">
                         </div>
 
-                        <div class="form-group">
-                            <select name="user_role" id="">
-                                <option value="subsciber"><?php echo $user_role ?></option>
-                                <?php
-                                if ($user_role == 'admin') {
-                                    echo "<option value='subscriber'>subscriber</option>";
-                                } else {
-                                    echo "<option value='admin'>admin</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
 
                         <div class="form-group">
                             <label for="username">Username</label>
@@ -105,7 +90,7 @@ if (isset($_SESSION['username'])) {
 
                         <div class="form-group">
                             <label for="user_password">Password</label>
-                            <input type="password" value="<?php echo $user_password; ?>" class="form-control" name="user_password">
+                            <input type="password" class="form-control" name="user_password">
                         </div>
 
                         <div class="form-group">

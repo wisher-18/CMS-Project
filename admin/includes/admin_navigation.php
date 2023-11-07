@@ -9,8 +9,11 @@
         </button>
         <a class="navbar-brand" href="index.php">CMS Admin</a>
     </div>
+
+
     <!-- Top Menu Items -->
     <ul class="nav navbar-right top-nav">
+        <li><a href="">Users Online: <span class="usersonline"></span></a></li>
         <li><a href="../index.php">HOME</a></li>
 
 

@@ -18,9 +18,9 @@ if(isset($_GET['edit_user'])){
     }
     
     
-}
 
-if (isset($_POST['edit_user'])) {
+
+if(isset($_POST['edit_user'])) {
     $user_firstname = $_POST['user_firstname'];
     $user_lastname = $_POST['user_lastname'];
     $user_role = $_POST['user_role'];
@@ -31,20 +31,26 @@ if (isset($_POST['edit_user'])) {
 
     $user_email = $_POST['user_email'];
     $user_password = $_POST['user_password'];
-    // $post_date = date('d-m-y');
 
+    // $post_date = date('d-m-y');
     // move_uploaded_file($post_image_temp, "../images/$post_image");
 
-    //selecting randSalt from users
-    $query = "SELECT randSalt FROM users where username= '{$username}'";
-    $select_randSalt_query = mysqli_query($connection, $query);
-    confirmQuery($select_randSalt_query);
+    if(!empty($user_password)){
+        $query_password = "SELECT user_password FROM users WHERE user_id = $user_id";
 
-    $row = mysqli_fetch_array($select_randSalt_query);
-    $salt = $row['randSalt'];
-    //making password into hashed
-    $hashed_password = crypt($user_password, $salt);
+        $get_user_query = mysqli_query($connection, $query_password);
 
+        $row = mysqli_fetch_array($get_user_query);
+
+        $db_user_password = $row['user_password'];
+        
+        confirmQuery($get_user_query);
+
+        if($db_user_password != $user_password){
+            $hashed_password = password_hash($user_password, PASSWORD_BCRYPT, array('cost'=> 10));
+            
+
+        
     $query = "UPDATE users SET ";
     $query .= "user_firstname = '{$user_firstname}', ";
     $query .= "user_lastname = '{$user_lastname}', ";
@@ -59,12 +65,18 @@ if (isset($_POST['edit_user'])) {
     $edit_user_query = mysqli_query($connection, $query);
 
     confirmQuery($edit_user_query);
+        
 
     echo "<p class= 'bg-success'>User Updated. <a href='users.php'>View All Users?</a></p>";
-
-
+        }
+    }
 
 }
+}else{
+    header("Location: index.php");
+}
+
+
 ?>
 <form action="" method="post" enctype="multipart/form-data">
 
@@ -93,9 +105,6 @@ if (isset($_POST['edit_user'])) {
          </select>
     </div>
 
-    
-
-
     <!-- <div class="form-group">
         <label for="post_image">Post Image</label>
         <input type="file" name="post_image">
@@ -113,7 +122,7 @@ if (isset($_POST['edit_user'])) {
 
     <div class="form-group">
         <label for="user_password">Password</label>
-        <input type="password" value="<?php echo $user_password;?>" class="form-control" name="user_password" >
+        <input type="password" class="form-control" name="user_password" >
     </div>
 
     <div class="form-group">

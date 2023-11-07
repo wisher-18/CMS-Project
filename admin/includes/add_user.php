@@ -2,7 +2,7 @@
 if (isset($_POST['create_user'])) {
     $user_firstname = $_POST['user_firstname'];
     $user_lastname = $_POST['user_lastname'];
-    $user_role = $_POST['user_role'];
+    // $user_role = $_POST['user_role'];
     $username = $_POST['username'];
 
     // $post_image = $_FILES['post_image']['name'];
@@ -10,14 +10,16 @@ if (isset($_POST['create_user'])) {
 
     $user_email = $_POST['user_email'];
     $user_password = $_POST['user_password'];
+
+    //Hashing the password
+    $user_password = password_hash($user_password, PASSWORD_BCRYPT, array('cost'=> 10));
     // $post_date = date('d-m-y');
 
     // move_uploaded_file($post_image_temp, "../images/$post_image");
 
-    $query = "INSERT INTO users(user_firstname, user_lastname, 
-    user_role, username, user_email, user_password) ";
+    $query = "INSERT INTO users(user_firstname, user_lastname, username, user_email, user_password) ";
 
-    $query .= "VALUES ('$user_firstname', '$user_lastname', '$user_role',
+    $query .= "VALUES ('$user_firstname', '$user_lastname',
     '$username', '$user_email', '$user_password')";
 
     $create_user_query = mysqli_query($connection, $query);
@@ -39,14 +41,14 @@ if (isset($_POST['create_user'])) {
         <label for="user_lastname">Lastname</label>
         <input type="text" class="form-control" name="user_lastname">
     </div>
-
+<!-- 
     <div class="form-group">
         <select name="user_role" id="">
             <option value="subsciber">Select Option</option>
             <option value="admin">Admin</option>
             <option value="subscriber">Subscriber</option>
         </select>
-    </div>
+    </div> -->
 
     
 
@@ -68,7 +70,7 @@ if (isset($_POST['create_user'])) {
 
     <div class="form-group">
         <label for="user_password">Password</label>
-        <input type="password" class="form-control" name="user_password">
+        <input type="password" autocomplete="off" class="form-control" name="user_password">
     </div>
 
     <div class="form-group">

@@ -18,6 +18,9 @@
         $email    = mysqli_real_escape_string($connection, $email);
         $password = mysqli_real_escape_string($connection, $password);
 
+        //hashing the password using algo.s
+        $password = password_hash($password, PASSWORD_BCRYPT, array('cost'=> 10));
+
 
         // // Generate a unique salt and hash the password
         // $options = [
@@ -26,28 +29,30 @@
         // $password = password_hash($password, PASSWORD_BCRYPT, $options);
 
             //Selecting randSalt for encrypting 
-            $query = "SELECT randSalt FROM users";
-            $select_randsalt_query = mysqli_query($connection, $query);
-            if(!$select_randsalt_query){
-                die("QUERY FAILED".mysqli_errno($connection));
-            }
+            // $query = "SELECT randSalt FROM users";
+            // $select_randsalt_query = mysqli_query($connection, $query);
+            // if(!$select_randsalt_query){
+            //     die("QUERY FAILED".mysqli_errno($connection));
+            // }
 
             //Fetching result from randSalt query
-            $row = mysqli_fetch_assoc($select_randsalt_query);
-            $salt = $row['randSalt'];
+            // $row = mysqli_fetch_assoc($select_randsalt_query);
+            // $salt = $row['randSalt'];
 
             //Crypt Function
-            $hashed = crypt($password, '$2y$10$iusesomecrazystrings22');
+            // $hashed = crypt($password, '$2y$10$iusesomecrazystrings22');
 
             // //Inserting user into the database query
             $query = "INSERT INTO users (username, user_email, user_password, user_role) ";
-            $query .= "VALUES ('{$username}','{$email}', '{$hashed}','subscriber')";
+            $query .= "VALUES ('{$username}','{$email}', '{$password}','subscriber')";
             $insert_user_query = mysqli_query($connection, $query);
             if(!$insert_user_query){
                 die("QUERY FAILED".mysqli_errno($connection));
             }
+            
 
             $message = "Your registration has been submitted!";
+            
 
         }else{
             $message = "Fields cannot be empty!";
