@@ -84,9 +84,9 @@
                     
                     
                     //UPDATING COMMENT COUNT IN POSTS
-                    $query = "UPDATE posts SET post_comment_count = post_comment_count + 1 ";
-                    $query .= "WHERE post_id = $comment_post_id";
-                    $update_comment_count = mysqli_query($connection, $query);
+                    // $query = "UPDATE posts SET post_comment_count = post_comment_count + 1 ";
+                    // $query .= "WHERE post_id = $comment_post_id";
+                    // $update_comment_count = mysqli_query($connection, $query);
 
                     
                     header("Location: /cms/post.php?p_id={$get_post_id}");

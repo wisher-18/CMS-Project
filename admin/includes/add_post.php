@@ -40,6 +40,7 @@ if(isset($_POST['create_post'])){
 
 
     <div class="form-group">
+        <label for="category">Category</label>
         <select name="post_category" id="">
             <?php
             $query = "SELECT * FROM categories";
