@@ -1,5 +1,13 @@
 <?php
 
+function escape($string){
+    global $connection;
+    mysqli_real_escape_string($connection, trim($string));
+}
+
+
+
+
 //Counting Online Users
 function users_online(){
     if(isset($_GET['onlineusers'])){
