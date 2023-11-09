@@ -223,6 +223,11 @@ ul.alert-dropdown {
     color: #df8a13;
 }
 
+/* 
+#bulkOptionsContainerUsers{
+    padding: 0px;
+} */
+
 #bulkOptionsContainer{
     padding: 0px;
 }

@@ -17,10 +17,10 @@ if (isset($_POST['create_user'])) {
 
     // move_uploaded_file($post_image_temp, "../images/$post_image");
 
-    $query = "INSERT INTO users(user_firstname, user_lastname, username, user_email, user_password) ";
+    $query = "INSERT INTO users(user_firstname, user_lastname, username, user_email, user_password, user_role) ";
 
     $query .= "VALUES ('$user_firstname', '$user_lastname',
-    '$username', '$user_email', '$user_password')";
+    '$username', '$user_email', '$user_password', 'subscriber')";
 
     $create_user_query = mysqli_query($connection, $query);
 

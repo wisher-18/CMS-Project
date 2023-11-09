@@ -107,7 +107,7 @@
 <?php
 //APPROVING COMMENTS QUERY
 if(isset($_GET['change_to_admin'])){
-    $user_id_ad = escape($_GET['change_to_admin']);
+    $user_id_ad = $_GET['change_to_admin'];
     $query = "UPDATE users SET user_role = 'admin' WHERE user_id = {$user_id_ad} ";
     $make_admin_query = mysqli_query($connection, $query);
     confirmQuery($make_admin_query);
@@ -117,7 +117,7 @@ if(isset($_GET['change_to_admin'])){
 
 //DISAPPROVING COMMENTS QUERY
 if(isset($_GET['change_to_sub'])){
-    $user_id_sub = escape($_GET['change_to_sub']);
+    $user_id_sub = $_GET['change_to_sub'];
     $query = "UPDATE users SET user_role = 'subscriber' WHERE user_id = {$user_id_sub} ";
     $make_sub_query = mysqli_query($connection, $query);
     confirmQuery($make_sub_query);
@@ -126,13 +126,18 @@ if(isset($_GET['change_to_sub'])){
 
 
 
-//DELETING COMMENTS QUERY
+//DELETING USER ACCOUNT
 if(isset($_GET['delete'])){
-    $user_id_del = escape($_GET['delete']);
-    $query = "DELETE FROM users WHERE user_id = {$user_id_del} ";
-    $delete_user_query = mysqli_query($connection, $query);
-    confirmQuery($delete_user_query);
-    header("Location: users.php");
+    if(isset($_SESSION['user_role'])){
+        if($_SESSION['user_role'] == 'admin'){
+                    
+            $user_id_del = $_GET['delete'];
+            $query = "DELETE FROM users WHERE user_id = {$user_id_del} ";
+            $delete_user_query = mysqli_query($connection, $query);
+            confirmQuery($delete_user_query);
+            header("Location: users.php");
+        }
+    }
 }
 
 ?>

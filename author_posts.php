@@ -16,13 +16,13 @@
                 $get_post_id = $_GET['p_id'];
                 $get_post_author = $_GET['author'];
             }
-            $query = "SELECT * FROM posts WHERE post_author = '{$get_post_author}'";
+            $query = "SELECT * FROM posts WHERE post_user = '{$get_post_author}'";
             $select_all_posts_query = mysqli_query($connection, $query);
 
             while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
                 $post_id = $_GET['p_id'];
                 $post_title = $row['post_title'];
-                $post_author = $row['post_author'];
+                $post_author = $row['post_user'];
                 $post_date = $row['post_date'];
                 $post_image = $row['post_image'];
                 $post_content = $row['post_content'];

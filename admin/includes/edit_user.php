@@ -1,6 +1,6 @@
 <?php
 if(isset($_GET['edit_user'])){
-    $user_id_edit = escape($_GET['edit_user']);
+    $user_id_edit = $_GET['edit_user'];
 
     $query = "SELECT * FROM users WHERE user_id = $user_id_edit ";
     $select_user_query = mysqli_query($connection, $query);

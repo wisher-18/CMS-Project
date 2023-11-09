@@ -82,7 +82,7 @@
             <tr>
                 <th><input id="selectAllBoxes" type="checkbox"></th>
                 <th>Id</th>
-                <th>Author</th>
+                <th>User</th>
                 <th>Title</th>
                 <th>Category</th>
                 <th>Status</th>
@@ -102,6 +102,7 @@
         while ($row = mysqli_fetch_assoc($select_post)) {
             $post_id = $row['post_id'];
             $post_author = $row['post_author'];
+            $post_user = $row['post_user'];
             $post_title = $row['post_title'];
             $post_category_id = $row['post_category_id'];
             $post_status = $row['post_status'];
@@ -118,7 +119,15 @@
 
             <?php
             echo "<td>{$post_id}</td>";
-            echo "<td>{$post_author}</td>";
+
+            if(!empty($post_author)){
+                echo "<td>{$post_author}</td>";
+            }elseif(!empty($post_user)){
+                echo "<td>{$post_user}</td>";
+            }
+
+            
+
             echo "<td><a href='../post.php?p_id={$post_id}'>{$post_title}</a></td>";
             
             $query = "SELECT * FROM categories WHERE cat_id = $post_category_id";
@@ -163,7 +172,7 @@
 
 <?php
 if(isset($_GET['delete'])){
-    $post_id_del = escape($_GET['delete']);
+    $post_id_del = $_GET['delete'];
     $query = "DELETE FROM posts WHERE post_id = {$post_id_del} ";
     $delete_query = mysqli_query($connection, $query);
     confirmQuery($delete_query);
@@ -171,7 +180,7 @@ if(isset($_GET['delete'])){
 }
 
 if(isset($_GET['reset'])){
-    $post_id_del = escape($_GET['reset']);
+    $post_id_del = $_GET['reset'];
     $query = "UPDATE posts SET post_views_count = 0 WHERE post_id = ". mysqli_real_escape_string($connection,$_GET['reset']) ." ";
     $reset_query = mysqli_query($connection, $query);
     confirmQuery($reset_query);
