@@ -19,24 +19,38 @@
                 $views_query = "UPDATE posts SET post_views_count = post_views_count + 1 ";
                 $views_query .= "WHERE post_id = $get_post_id";
                 $update_view_count = mysqli_query($connection, $views_query);
-        
+                
+                if(isset($_SESSION['user_role']) && $_SESSION['user_role'] == 'admin'){
+                    //Selecting post to show
+                    $query = "SELECT * FROM posts WHERE post_id = '$get_post_id'";
+                }else{
+                    //Selecting post to show
+                    $query = "SELECT * FROM posts WHERE post_id = '$get_post_id' AND post_status= 'published' ";
 
-            //Selecting post to show
-            $query = "SELECT * FROM posts WHERE post_id = '$get_post_id'";
+                }
+
+            
             $select_all_posts_query = mysqli_query($connection, $query);
+            if(!$select_all_posts_query){
+                die("QUERY FAILED".mysqli_error($connection));
+            }
+
+            if(mysqli_num_rows($select_all_posts_query) < 1){
+                echo "<h1 class='text-center'>NO POSTS AVAILABLE</h1>";
+
+            }else{ 
 
             while ($row = mysqli_fetch_assoc($select_all_posts_query)) {
                 $post_id = $_GET['p_id'];
                 $post_title = $row['post_title'];
-                $post_author = $row['post_author'];
+                $post_user = $row['post_user'];
                 $post_date = $row['post_date'];
                 $post_image = $row['post_image'];
                 $post_content = $row['post_content'];
 
             ?>
                 <h1 class="page-header">
-                    Page Heading
-                    <small>Secondary Text</small>
+                    Post
                 </h1>
 
                 <!-- First Blog Post -->
@@ -44,7 +58,7 @@
                     <a href="post.php?p_id=<?php echo $post_id;?>"><?php echo $post_title ?></a>
                 </h2>
                 <p class="lead">
-                    by <a href="author_posts.php?author=<?php echo $post_author ?>&p_id=<?php echo $post_id ?>"><?php echo $post_author ?></a>
+                    by <a href="author_posts.php?author=<?php echo $post_user ?>&p_id=<?php echo $post_id ?>"><?php echo $post_user ?></a>
                 </p>
                 <p><span class="glyphicon glyphicon-time"></span><?php echo $post_date ?></p>
                 <hr>
@@ -58,9 +72,7 @@
 
             <?php
             }
-        }else{
-
-        }
+        
             ?>
         <?php
             //CREATING COMMENT QUERY
@@ -155,6 +167,11 @@
                 
                 <?php
                 }
+            }
+            }else{
+                header("Location: index.php");
+    
+            }
                 ?>
                 <!-- Comment -->
                 

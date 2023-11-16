@@ -68,6 +68,23 @@ if(isset($_POST['edit_user'])) {
         
 
     echo "<p class= 'bg-success'>User Updated. <a href='users.php'>View All Users?</a></p>";
+        }else{
+            $query = "UPDATE users SET ";
+    $query .= "user_firstname = '{$user_firstname}', ";
+    $query .= "user_lastname = '{$user_lastname}', ";
+    // $query .= "post_date = now(), ";
+    $query .= "user_email = '{$user_email}', ";
+    $query .= "user_role = '{$user_role}', ";
+    $query .= "username = '{$username}' ";
+    
+    $query .= "WHERE user_id = {$user_id_edit}";
+
+    $edit_user_query = mysqli_query($connection, $query);
+
+    confirmQuery($edit_user_query);
+        
+
+    echo "<p class= 'bg-success'>User Updated. <a href='users.php'>View All Users?</a></p>";
         }
     }
 
@@ -122,7 +139,7 @@ if(isset($_POST['edit_user'])) {
 
     <div class="form-group">
         <label for="user_password">Password</label>
-        <input type="password" class="form-control" name="user_password" >
+        <input type="password" value="<?php echo $user_password;?>" class="form-control" name="user_password" >
     </div>
 
     <div class="form-group">

@@ -1,5 +1,16 @@
 <?php
 
+
+function recordCount($table){
+    global $connection;
+    $query = "SELECT * FROM ".$table;
+    $select_all_post = mysqli_query($connection, $query);
+
+    return mysqli_num_rows($select_all_post);
+}
+
+
+
 function escape($string){
     global $connection;
     mysqli_real_escape_string($connection, trim($string));

@@ -69,13 +69,13 @@ if (isset($_POST['update_post'])) {
     <div class="form-group">
         <label for="catogory">Category</label>
         <select name="post_category" id="post_category">
-            <?php 
-            $query_select = "SELECT cat_title FROM categories WHERE cat_id = {$post_category_id} ";
-            $cat_query = mysqli_query($connection, $query_select);
-            $row = mysqli_fetch_array($cat_query);
-            $category_title = $row['cat_title'];
-            echo "<option value='{$category_title}'>{$category_title}</option>"; 
-            ?>
+            <!-- <?php 
+            // $query_select = "SELECT cat_title FROM categories WHERE cat_id = {$post_category_id} ";
+            // $cat_query = mysqli_query($connection, $query_select);
+            // $row = mysqli_fetch_array($cat_query);
+            // $category_title = $row['cat_title'];
+            // echo "<option value='{$category_title}'>{$category_title}</option>"; 
+            // ?> -->
 
             <?php 
             $query = "SELECT * FROM categories ";
@@ -85,7 +85,13 @@ if (isset($_POST['update_post'])) {
             while ($row = mysqli_fetch_assoc($select_categories)) {
                 $cat_id = $row['cat_id'];
                 $cat_title = $row['cat_title'];
-                echo "<option value='{$cat_id}'>{$cat_title}</option>";
+
+                if($cat_id == $post_category_id){
+                    echo "<option selected value='{$cat_id}'>{$cat_title}</option>";
+                }else{
+                    echo "<option value='{$cat_id}'>{$cat_title}</option>";
+                }
+                
             }
             
             
@@ -113,11 +119,6 @@ if (isset($_POST['update_post'])) {
         </select>
     </div>
 
-<!--             
-    <div class="form-group">
-        <label for="post_author">Post Author</label>
-        <input value="<?php echo $post_author;?>" type="text" class="form-control" name="post_author">
-    </div> -->
         
     <div class="form-group">
     <select name="post_status" id="">

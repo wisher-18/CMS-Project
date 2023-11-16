@@ -1,4 +1,6 @@
 <?php
+
+    include("delete_modal.php");
     if(isset($_POST['checkBoxArray'])){
     
         foreach($_POST['checkBoxArray'] as $postValueId){
@@ -32,17 +34,22 @@
                         $post_title = $row['post_title'];
                         $post_category_id = $row['post_category_id'];
                         $post_author = $row['post_author'];
+                        $post_user = $row['post_user'];
                         $post_status = $row['post_status'];
                         $post_image = $row['post_image'];
                         $post_tags = $row['post_tags'];
                         $post_content = $row['post_content'];
 
+                        if(empty($post_tags)){
+                            $post_tags = "No tags";
+                        }
+
                     }
 
-                    $query = "INSERT INTO posts(post_category_id, post_title, post_author, 
+                    $query = "INSERT INTO posts(post_category_id, post_title,post_author, post_user, 
                         post_date, post_image, post_content, post_tags,  post_status) ";
 
-                        $query .= "VALUES ('$post_category_id', '$post_title', '$post_author', now(),
+                        $query .= "VALUES ('$post_category_id', '$post_title','$post_author', '$post_user', now(),
                         '$post_image', '$post_content', '$post_tags', '$post_status')";
 
                         $copy_query = mysqli_query($connection, $query);
@@ -50,6 +57,8 @@
                         if(!$copy_query){
                             die("QUERY FAILED!".mysqli_error($connection));
                         }
+
+                        header("Location: posts.php");
 
                     break;
                 
@@ -159,7 +168,8 @@
             echo "<td>{$post_date}</td>";
             echo "<td><a href= 'posts.php?reset={$post_id}'>{$post_views_count}</a></td>";
             echo "<td><a href='posts.php?source=edit_post&p_id={$post_id}'>Edit</a></td>";
-            echo "<td><a onClick=\"javascript: return confirm('Are you sure you want to delete this post?');\" href='posts.php?delete={$post_id}'>Delete</a></td>";
+            echo "<td><a rel='$post_id' href='javascript:void(0)'  class='delete_link'>Delete</a></td>";
+            // echo "<td><a onClick=\"javascript: return confirm('Are you sure you want to delete this post?');\" href='posts.php?delete={$post_id}'>Delete</a></td>";
             echo "</tr>";
         }
         
@@ -188,3 +198,21 @@ if(isset($_GET['reset'])){
 }
 
 ?>
+
+
+<script>
+    $(document).ready(function(){
+        $(".delete_link").on('click',function(){
+            var id = $(this).attr("rel");
+
+            var delete_url = "posts.php?delete="+ id +"";
+
+            $(".modal_delete_link").attr("href", delete_url);
+
+            $("#exampleModal").modal('show');
+
+            
+        });
+    });
+    
+</script>
