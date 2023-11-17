@@ -132,21 +132,18 @@
             </div>
             <!-- /.row -->
             <?php
-            $query = "SELECT * FROM posts WHERE post_status= 'published' ";
-            $select_all_publish = mysqli_query($connection, $query);
-            $publish_count = mysqli_num_rows($select_all_publish);
+            
+            //Publish posts count
+            $publish_count = checkStatus('posts', 'post_status', 'published');
 
-            $query = "SELECT * FROM posts WHERE post_status= 'draft' ";
-            $select_all_draft_count = mysqli_query($connection, $query);
-            $draft_count = mysqli_num_rows($select_all_draft_count);
+            //Draft posts count
+            $draft_count = checkStatus('posts', 'post_status', 'draft');
 
-            $query = "SELECT * FROM comments WHERE comment_status= 'disapproved' ";
-            $disapporved_comment = mysqli_query($connection, $query);
-            $disapproved_count = mysqli_num_rows($disapporved_comment);
+            //Disapproved comments count
+            $disapproved_count = checkStatus('comments', 'comment_status', 'disapproved');
 
-            $query = "SELECT * FROM users WHERE user_role= 'subscriber' ";
-            $select_all_subscribers = mysqli_query($connection, $query);
-            $subscriber_count = mysqli_num_rows($select_all_subscribers);
+            //Subscribers count
+            $subscriber_count = checkStatus('users','user_role','subscriber');
             
             ?>
 
@@ -163,7 +160,7 @@
                             <?php
                                 $element_text = ['All Posts','Draft Posts','Active Posts', 'Comments', 'Pending Comments','Users','Subscribers', 'Categories'];
                                 $element_count = [$post_count, $draft_count, $publish_count ,$comment_count,$disapproved_count, $user_count,$subscriber_count, $category_count];                            
-                                for($i = 0; $i < 7; $i++){
+                                for($i = 0; $i < 8; $i++){
                                     echo "['{$element_text[$i]}'". ",". "{$element_count[$i]}],";
 
                                 }

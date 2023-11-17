@@ -1,5 +1,121 @@
 <?php
 
+function redirect($location){
+    return header("Location:".$location);
+}
+
+function login_user($username, $password){
+    global $connection;
+    
+    $username = trim(mysqli_real_escape_string($connection, $username));
+    $password = trim(mysqli_real_escape_string($connection, $password));
+
+    $query = "SELECT * FROM users WHERE username = '{$username}' ";
+        $select_user_query = mysqli_query($connection, $query);
+        confirmQuery($select_user_query);
+
+        while($row = mysqli_fetch_assoc($select_user_query)){
+                $db_user_id = $row['user_id'];
+                $db_username = $row['username'];
+                $db_password = $row['user_password'];
+                $db_user_firstname = $row['user_firstname'];
+                $db_user_lastname = $row['user_lastname'];
+                $db_user_role = $row['user_role'];
+                
+        }
+
+        // Encrypting Password
+        // $password = crypt($password, $db_password);
+
+        if(password_verify($password, $db_password)){
+            $_SESSION['username'] = $db_username;
+            $_SESSION['firstname'] = $db_user_firstname;
+            $_SESSION['lastname'] = $db_user_firstname;
+            $_SESSION['user_role'] = $db_user_role;
+            
+            redirect("/cms/admin");
+
+        }else{
+            echo "Invalid Credentials!";
+            redirect("cms/index.php");
+        }
+}
+
+function register_user($username, $email, $password){
+    
+    global $connection;
+        $username = mysqli_real_escape_string($connection, $username);
+        $email    = mysqli_real_escape_string($connection, $email);
+        $password = mysqli_real_escape_string($connection, $password);
+
+        //hashing the password using algo.s
+        $password = password_hash($password, PASSWORD_BCRYPT, array('cost' => 10));
+
+        // //Inserting user into the database query
+        $query = "INSERT INTO users (username, user_email, user_password, user_role) ";
+        $query .= "VALUES ('{$username}','{$email}', '{$password}','subscriber')";
+        $insert_user_query = mysqli_query($connection, $query);
+        
+        confirmQuery($insert_user_query);
+    
+
+}
+
+//Checking duplicate email in database
+function email_exists($email){
+    global $connection;
+
+    $query = "SELECT user_email FROM users WHERE user_email = '$email' ";
+    $result = mysqli_query($connection, $query);
+    confirmQuery($result);
+    if(mysqli_num_rows($result) > 0 ){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+//Checking duplicate username in the database
+function username_exists($username){
+    global $connection;
+
+    $query = "SELECT username FROM users WHERE username = '$username' ";
+    $result = mysqli_query($connection, $query);
+    confirmQuery($result);
+    if(mysqli_num_rows($result) > 0 ){
+        return true;
+    }else{
+        return false;
+    }
+}
+
+
+//Checking if user is admin
+function is_admin($username = ''){
+    global $connection;
+    $query = "SELECT user_role FROM users WHERE username = '$username' ";
+    $result = mysqli_query($connection, $query);
+    confirmQuery($result);
+    $row = mysqli_fetch_array($result);
+    if($row['user_role'] == 'admin'){
+        return true;
+    }else{
+        return false;
+    }
+
+}
+
+function checkStatus($table, $column, $status){
+    global $connection;
+    $query = "SELECT * FROM $table WHERE $column = '$status' ";
+    $select_all_publish = mysqli_query($connection, $query);
+
+    return mysqli_num_rows($select_all_publish);
+
+}
+
+
+//Returning the count of the records for respective table.
 
 function recordCount($table){
     global $connection;
@@ -51,9 +167,10 @@ function users_online(){
     
 
 }
+//Calling the function
 users_online();
 
-
+//Confirm Mysql query
 function confirmQuery($result){
     global $connection;
     if(!$result){
@@ -100,6 +217,7 @@ function findAllCategories()
     }
 }
 
+//Deleting categories from categories table
 function deleteCategories(){
     global $connection;
     if(isset($_GET['delete'])){
