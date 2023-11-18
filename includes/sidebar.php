@@ -1,3 +1,5 @@
+
+
 <div class="col-md-4">
 
     <!-- Blog Search Well -->
@@ -27,7 +29,7 @@
 
         <?php else: ?>
             <h4>Login</h4>
-            <form action="includes/login.php" method="post">
+            <form action="/cms/login.php" method="post">
                 <div class="form-group">
                     <input type="text" name="username" class="form-control" placeholder="Enter Username">
                 </div>
@@ -36,6 +38,9 @@
                     <span class="input-group-btn">
                         <button class="btn btn-primary" name="login" type="submit">Login</button>
                     </span>
+                </div>
+                <div class="form-group">
+                    <a href="forgot.php?forgot=<?php echo uniqid(); ?>">Forgot Password</a>
                 </div>
             </form>
         <?php endif; ?>

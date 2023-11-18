@@ -1,3 +1,5 @@
+<?php session_start(); ?>
+<?php include "admin/functions.php"; ?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -29,3 +31,4 @@
 </head>
 
 <body>
+    

@@ -1,0 +1,14 @@
+{
+    "name": "hp/cms",
+    "autoload": {
+        "psr-4": {
+            "Hp\\Cms\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "wisher"
+        }
+    ],
+    "require": {}
+}

@@ -36,17 +36,31 @@
                             echo "<li class = '$category_class'><a href='/cms/category/{$cat_id}'>{$cat_title}</a></li>";
                         }
                     ?>
-                    <li>
-                        <a href="/cms/admin">Admin</a>
-                    </li>
-                    <li class="<?php echo $registration_class; ?>">
-                        <a href="/cms/registration">Register</a>
-                    </li>
+                    
+                    <?php if(isset($_SESSION['user_role'])): ?>
+
+
+                        <li>
+                            <a href="/cms/admin">Admin</a>
+                        </li>
+                        <li>
+                            <a href="/cms/includes/logout.php">Logout</a>
+                        </li>
+                        <?php else: ?>
+                            <li>
+                                <a href="/cms/login">Login</a>
+                            </li>
+                            <li class="<?php echo $registration_class; ?>">
+                                <a href="/cms/registration">Register</a>
+                            </li>
+
+                    <?php endif; ?> 
+                    
                     <li>
                         <a href="/cms/contact">Contact</a>
                     </li>
                     <?php 
-                    session_start();
+                    
                         if(isset($_SESSION['username'])){
                             if(isset($_GET['p_id'])){
                                 $the_post_id = $_GET['p_id'];

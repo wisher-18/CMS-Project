@@ -29,6 +29,7 @@ if (isset($_SESSION['username'])) {
     
         $user_email = $_POST['user_email'];
         $user_password = $_POST['user_password'];
+        $hashed_password = password_hash($user_password, PASSWORD_BCRYPT, array('cost'=>10));
         // $post_date = date('d-m-y');
     
         // move_uploaded_file($post_image_temp, "../images/$post_image");
@@ -37,7 +38,7 @@ if (isset($_SESSION['username'])) {
         $query .= "user_lastname = '{$user_lastname}', ";
         // $query .= "post_date = now(), ";
         $query .= "user_email = '{$user_email}', ";
-        $query .= "user_password = '{$user_password}', ";
+        $query .= "user_password = '{$hashed_password}', ";
         $query .= "username = '{$username}' ";
         
         $query .= "WHERE username = '{$username}'";

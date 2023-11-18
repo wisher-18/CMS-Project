@@ -1,14 +1,74 @@
 <?php
 
 function redirect($location){
-    return header("Location:".$location);
+    header("Location:".$location);
+    exit;
+}
+
+//Counting Online Users
+function users_online(){
+    if(isset($_GET['onlineusers'])){
+        global $connection;
+        if(!$connection){
+            include("../includes/db.php");
+            $session = session_id();
+            $time = time();
+            $time_out_in_seconds = 30;
+            $time_out = $time - $time_out_in_seconds;
+            
+            $query = "SELECT * FROM users_online WHERE session = '$session' ";
+            $send_query = mysqli_query($connection, $query);
+            $count = mysqli_num_rows($send_query);
+            
+            if($count == NULL){
+                mysqli_query($connection, "INSERT INTO users_online (session, time) 
+            VALUES ('$session','$time')");
+        }else{
+            mysqli_query($connection, "UPDATE users_online SET time = '$time' 
+            WHERE session = '$session' ");
+        }
+        $users_online_query = mysqli_query($connection, "SELECT * FROM users_online WHERE time > '$time_out' ");
+        echo $count_user = mysqli_num_rows($users_online_query);
+        
+        
+    }
+}
+}
+//Calling the function
+users_online();
+
+
+
+
+//Checking is there any POST or GET method
+function ifItIsMethod($method=null){
+    if($_SERVER['REQUEST_METHOD'] == strtoupper($method)){
+        return true;
+    }
+    return false;
+}
+
+function isLoggedIn(){
+    if(isset($_SESSION['user_role'])){
+        return true;
+
+    }
+        return false;
+    
+    
+}
+
+function checkIfUserLoggedInAndRedirect($redirectLocation=null){
+    if(isLoggedIn()){
+        redirect($redirectLocation);
+    }
 }
 
 function login_user($username, $password){
     global $connection;
     
-    $username = trim(mysqli_real_escape_string($connection, $username));
-    $password = trim(mysqli_real_escape_string($connection, $password));
+    $username = mysqli_real_escape_string($connection, $username);
+    $password = mysqli_real_escape_string($connection, $password);
 
     $query = "SELECT * FROM users WHERE username = '{$username}' ";
         $select_user_query = mysqli_query($connection, $query);
@@ -18,27 +78,24 @@ function login_user($username, $password){
                 $db_user_id = $row['user_id'];
                 $db_username = $row['username'];
                 $db_password = $row['user_password'];
-                $db_user_firstname = $row['user_firstname'];
-                $db_user_lastname = $row['user_lastname'];
                 $db_user_role = $row['user_role'];
+
+                if(password_verify($password, $db_password)){
+                    $_SESSION['username'] = $db_username;
+                    $_SESSION['user_role'] = $db_user_role;
+        
+                    redirect("/cms/admin");
+        
+        
+                }else{
+                    return false;
+                }
                 
         }
+        return false;
 
         // Encrypting Password
-        // $password = crypt($password, $db_password);
-
-        if(password_verify($password, $db_password)){
-            $_SESSION['username'] = $db_username;
-            $_SESSION['firstname'] = $db_user_firstname;
-            $_SESSION['lastname'] = $db_user_firstname;
-            $_SESSION['user_role'] = $db_user_role;
-            
-            redirect("/cms/admin");
-
-        }else{
-            echo "Invalid Credentials!";
-            redirect("cms/index.php");
-        }
+        // $password = crypt($password, $db_password);        
 }
 
 function register_user($username, $email, $password){
@@ -135,40 +192,10 @@ function escape($string){
 
 
 
-//Counting Online Users
-function users_online(){
-    if(isset($_GET['onlineusers'])){
-        global $connection;
-        if(!$connection){
-            session_start();
-            include("../../includes/db.php");
-            $session = session_id();
-            $time = time();
-            $time_out_in_seconds = 30;
-            $time_out = $time - $time_out_in_seconds;
-            
-            $query = "SELECT * FROM users_online WHERE session = '$session' ";
-            $send_query = mysqli_query($connection, $query);
-            $count = mysqli_num_rows($send_query);
-            
-            if($count == NULL){
-                mysqli_query($connection, "INSERT INTO users_online (session, time) 
-            VALUES ('$session','$time')");
-        }else{
-            mysqli_query($connection, "UPDATE users_online SET time = '$time' 
-            WHERE session = '$session' ");
-        }
-        $users_online_query = mysqli_query($connection, "SELECT * FROM users_online WHERE time > '$time_out' ");
-        echo $count_user = mysqli_num_rows($users_online_query);
-        
-        
-    }
-}
+
     
 
-}
-//Calling the function
-users_online();
+
 
 //Confirm Mysql query
 function confirmQuery($result){
